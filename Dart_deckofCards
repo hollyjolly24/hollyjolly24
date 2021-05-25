@@ -5,14 +5,17 @@ void main() {
   //Create instances of new deck
   var deck = new Deck();
   //The instance I create a new instance of deck - initialize the 52 without needing additional code underneath the new Deck()
- // deck.shuffle(); //CHECK to see if dart has already built-in classes, they have a BUNCH!
+ // deck.shuffle(); 
+  //CHECK to see if dart has already built-in classes, they have a BUNCH!
   //print(deck.cardsWithSuit('Diamonds')); 
   print(deck);//unmodified deck
- // print(deck.deal(5)); //hand w/ 5 cards
- // print(deck); //deck without the hand, five fewer cards, dealt out the cards
+ // print(deck.deal(5)); 
+  //hand w/ 5 cards
+ // print(deck); 
+  //deck without the hand, five fewer cards, dealt out the cards
   
-  deck.removeCard('Diamonds','Two'); //remove a card
-  print(deck); //print deck, card is gone
+  //deck.removeCard('Diamonds','Two'); //remove a card
+ // print(deck); //print deck, card is gone
 }
 
 class Deck{
@@ -27,11 +30,23 @@ class Deck{
     var ranks = ['Ace','Two', 'Three', 'Four', 'Five',/* 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Jack' , 'Queen' , 'King'*/];
     var suits = ['Diamonds', 'Hearts' , 'Clubs' , 'Spades'];
     //Nested for loop to add each card into deck
-   for (var suit in suits){
+   for (var Mysuit in suits){
      for(var rank in ranks){
        //create new instance of card
        //Pass in suit and rank 
-       var card = new Card(rank,suit); 
+       //var card = new Card(rank,suit); 
+       //If I were to swap suit and rank in var card = , no error would show but your output would be odd.. BUG!!!!!!!!!!
+       //Dart has a feature called named parameters, shown below
+       //REFACTOR TO ENSURE NO BUG
+       var card = new Card(
+            suit: Mysuit,
+            rank: rank
+            //NOW YOU CAN SWITCH SUIT AND RANK
+       );
+       //What the above does is create a named parameters, the string on left of 
+//: is the name of arg. im providing to constructor, the string on right of : can be anything, it refers to var String in the for loop , switched to mySuit to show this fact
+       
+       
        //Add card to list - deck
        cards.add(card);
       
@@ -71,8 +86,8 @@ class Deck{
     //lists don't actually get modified they just get referenced, so that's why I had to regenerate and override the deck, because it wouldn't automatically take out the hand that is dealt 
   }
   
-  removeCard(String suit, String rank){ 
-    return cards.removeWhere((card) => card.rank == rank && card.suit == suit);
+  removeCard(String suit, String rank){ //suit and rank can get switched
+    return cards.removeWhere((card) => (card.rank == rank) && (card.suit == suit)); //Using refactory method => 
   }
 }
 
@@ -82,9 +97,13 @@ class Card{
   
   //Create constructor function, so you can send in rank and suit
   
-  Card(this.rank,this.suit);
+  //Card(this.rank,this.suit);
+  //^^ without name param.
+  
+  Card({this.rank, this.suit});
+  //NOW anytime we create a new card we are going to apss in variables named suit and rank, the constructor is going to check to see if it is given named arg. going to check for suit and rank, extract them 
     //this. assigns the string suit and rank under class card to what is getting passed to the card class - automatically
   toString() { //toString for customizing string
-    return '$rank of $suit';
+    return '$rank of $suit'; //Need $
   }
 }
