@@ -1,0 +1,90 @@
+//******* api.dartlang.org **********
+//    USE THE STANDARD LIBRARY 
+
+void main() {
+  //Create instances of new deck
+  var deck = new Deck();
+  //The instance I create a new instance of deck - initialize the 52 without needing additional code underneath the new Deck()
+ // deck.shuffle(); //CHECK to see if dart has already built-in classes, they have a BUNCH!
+  //print(deck.cardsWithSuit('Diamonds')); 
+  print(deck);//unmodified deck
+ // print(deck.deal(5)); //hand w/ 5 cards
+ // print(deck); //deck without the hand, five fewer cards, dealt out the cards
+  
+  deck.removeCard('Diamonds','Two'); //remove a card
+  print(deck); //print deck, card is gone
+}
+
+class Deck{
+  List<Card> cards = [];
+  //Initialize cards ^^
+  //Will help with null, script errors
+  
+  //Constructor func.
+  //Initializing automat.
+  Deck() {
+    //Create two lists
+    var ranks = ['Ace','Two', 'Three', 'Four', 'Five',/* 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Jack' , 'Queen' , 'King'*/];
+    var suits = ['Diamonds', 'Hearts' , 'Clubs' , 'Spades'];
+    //Nested for loop to add each card into deck
+   for (var suit in suits){
+     for(var rank in ranks){
+       //create new instance of card
+       //Pass in suit and rank 
+       var card = new Card(rank,suit); 
+       //Add card to list - deck
+       cards.add(card);
+      
+     }
+   }
+  }
+  
+  toString() {
+    return cards.toString(); //return card string representation of tostring and then it returns the card list in string format
+  }
+  
+  shuffle(){
+    cards.shuffle(); //shuffle is already within dart standard library ***
+  }
+  
+  cardsWithSuit(String suit){
+    //when it is just suit, then dart says its dynamic - it can't figure out what type
+    //so, I added String to suit
+    
+    //Find every card within a given suit
+    //Rely on Standard Library NOT needed to write your own for loop , api.dartlang.org
+    return cards.where((card) => card.suit == suit);
+   //return card.suit == suit; ^^ equivalent to the above where it is on one line, the arrow. => is automatically returned, where in the long form syntax, one that is //, you have to add return, both give same result - one is just shorter!
+    
+    
+      //where() requires a function to get passed in, every car din card list passed to where function, then the return is the logic, if boolean is T, value saved, otherwise, don't care
+     //method in st. library
+  }
+  
+  deal(int handSize) {
+    //       ^^^How many cards need dealed to user 
+    var hand = cards.sublist(0,handSize);
+    //Delete the hand from the deck
+    cards = cards.sublist(handSize);//everything remaining in list 
+    //Don't need second arg. will auto. go to end
+   return hand;
+    //lists don't actually get modified they just get referenced, so that's why I had to regenerate and override the deck, because it wouldn't automatically take out the hand that is dealt 
+  }
+  
+  removeCard(String suit, String rank){ 
+    return cards.removeWhere((card) => card.rank == rank && card.suit == suit);
+  }
+}
+
+class Card{
+  String suit;
+  String rank;
+  
+  //Create constructor function, so you can send in rank and suit
+  
+  Card(this.rank,this.suit);
+    //this. assigns the string suit and rank under class card to what is getting passed to the card class - automatically
+  toString() { //toString for customizing string
+    return '$rank of $suit';
+  }
+}
